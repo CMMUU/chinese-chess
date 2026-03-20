@@ -115,30 +115,14 @@ src/
 └── test/                      # 单元测试
 ```
 
-## 版本发布
+## 文档
 
-使用 Git Tag 进行版本发布：
+项目文档位于 `docs/` 目录：
 
-```bash
-# 创建版本标签
-git tag v1.0.0
-
-# 推送到远程触发构建
-git push origin v1.0.0
-```
-
-推送后 GitHub Actions 会自动：
-1. 在 macOS、Windows、Linux 三个平台构建
-2. 生成对应的安装包（.dmg、.exe、.deb）
-3. 自动创建草稿 Release
-
-## 下载安装
-
-从 [Releases](https://github.com/CMMUU/chinese-chess/releases) 页面下载对应平台的安装包：
-
-- **macOS**: `.dmg` 安装包
-- **Windows**: `.exe` 安装包
-- **Linux**: `.deb` 安装包
+- [核心代码讲解与 JavaFX 运用](docs/核心代码讲解.md) (中文)
+- [Core Code Guide & JavaFX Usage](docs/core-code-guide.md) (English)
+- [コアコード解説と JavaFX 活用](docs/core-code-guide-ja.md) (日本語)
+- [핵심 코드 설명 및 JavaFX 활용](docs/core-code-guide-ko.md) (한국어)
 
 ## 参与贡献
 
