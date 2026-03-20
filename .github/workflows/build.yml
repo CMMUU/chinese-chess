@@ -6,6 +6,9 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-mac:
     runs-on: macos-latest
@@ -43,7 +46,7 @@ jobs:
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: target/jpackage/ChineseChess-1.0.0.dmg
           draft: true
@@ -79,7 +82,7 @@ jobs:
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: target/jpackage/ChineseChess-1.0.0.exe
           draft: true
@@ -111,26 +114,18 @@ jobs:
           mkdir -p target/jpackage
           jpackage --input target --main-jar chinese-chess-1.0.0.jar --name ChineseChess --app-version 1.0.0 --vendor "ChineseChess Team" --type deb --dest target/jpackage
 
-      - name: Create AppImage
-        run: |
-          jpackage --input target --main-jar chinese-chess-1.0.0.jar --name ChineseChess --app-version 1.0.0 --vendor "ChineseChess Team" --type appimage --dest target/jpackage
-
-      - name: Upload Linux artifacts
+      - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: ChineseChess-Linux
-          path: |
-            target/jpackage/ChineseChess-1.0.0.deb
-            target/jpackage/ChineseChess-1.0.0.AppImage
+          path: target/jpackage/ChineseChess-1.0.0.deb
           retention-days: 5
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: |
-            target/jpackage/ChineseChess-1.0.0.deb
-            target/jpackage/ChineseChess-1.0.0.AppImage
+          files: target/jpackage/ChineseChess-1.0.0.deb
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
