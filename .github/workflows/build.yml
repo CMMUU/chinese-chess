@@ -2,8 +2,13 @@ name: Build and Release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -44,15 +49,6 @@ jobs:
           path: target/jpackage/ChineseChess-1.0.0.dmg
           retention-days: 5
 
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: target/jpackage/ChineseChess-1.0.0.dmg
-          draft: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build-windows:
     runs-on: windows-latest
     steps:
@@ -79,15 +75,6 @@ jobs:
           name: ChineseChess-Windows
           path: target/jpackage/ChineseChess-1.0.0.exe
           retention-days: 5
-
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: target/jpackage/ChineseChess-1.0.0.exe
-          draft: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-linux:
     runs-on: ubuntu-latest
@@ -121,11 +108,36 @@ jobs:
           path: target/jpackage/ChineseChess-1.0.0.deb
           retention-days: 5
 
+  create-release:
+    needs: [build-mac, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') || contains(github.event.head_commit.message, 'release')
+    steps:
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ChineseChess-macOS
+          path: release-files
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ChineseChess-Windows
+          path: release-files
+
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ChineseChess-Linux
+          path: release-files
+
+      - name: List files
+        run: ls -la release-files/
+
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: target/jpackage/ChineseChess-1.0.0.deb
+          files: release-files/*
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
