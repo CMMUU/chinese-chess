@@ -113,8 +113,9 @@ jobs:
       - name: Update version
         if: needs.prepare.outputs.is_release == 'true'
         run: |
-          # 替换 pom.xml 中的项目版本号（第9行）
-          (Get-Content pom.xml)[8] -replace '<version>.*</version>', "<version>${{ needs.prepare.outputs.version }}</version>" | Set-Content pom.xml -NoNewline -Encoding utf8
+          $lines = Get-Content pom.xml
+          $lines[8] = '    <version>${{ needs.prepare.outputs.version }}</version>'
+          $lines | Set-Content pom.xml -Encoding UTF8
           Get-Content pom.xml | Select-Object -First 9 | Select-Object -Last 1
 
       - name: Build with Maven
