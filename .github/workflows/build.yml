@@ -71,9 +71,9 @@ jobs:
       - name: Update version
         if: needs.prepare.outputs.is_release == 'true'
         run: |
-          # 只替换项目的主版本号 (<version> 在 </project> 之前的第一个)
-          sed -i "0,/<project>/{s/<version>[^<]*<\/version>/<version>${{ needs.prepare.outputs.version }}<\/version>/}" pom.xml
-          grep -m1 '<version>' pom.xml
+          # 替换 pom.xml 中的项目版本号（第9行）
+          sed -i '' '9s/<version>.*<\/version>/<version>${{ needs.prepare.outputs.version }}<\/version>/' pom.xml
+          sed -n '9p' pom.xml
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
@@ -113,11 +113,9 @@ jobs:
       - name: Update version
         if: needs.prepare.outputs.is_release == 'true'
         run: |
-          # 使用正则只替换第一个 <version> 标签
-          $content = Get-Content pom.xml -Raw
-          $content = $content -replace '(<version>)([^<]*)(</version>)', "`$1${{ needs.prepare.outputs.version }}`$3', 1
-          Set-Content pom.xml $content
-          Select-String -Path pom.xml -Pattern '<version>' | Select-Object -First 1
+          # 替换 pom.xml 中的项目版本号（第9行）
+          (Get-Content pom.xml)[8] -replace '<version>.*</version>', "<version>${{ needs.prepare.outputs.version }}</version>" | Set-Content pom.xml -NoNewline -Encoding utf8
+          Get-Content pom.xml | Select-Object -First 9 | Select-Object -Last 1
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
@@ -150,9 +148,9 @@ jobs:
       - name: Update version
         if: needs.prepare.outputs.is_release == 'true'
         run: |
-          # 只替换项目的主版本号 (<version> 在 </project> 之前的第一个)
-          sed -i "0,/<project>/{s/<version>[^<]*<\/version>/<version>${{ needs.prepare.outputs.version }}<\/version>/}" pom.xml
-          grep -m1 '<version>' pom.xml
+          # 替换 pom.xml 中的项目版本号（第9行）
+          sed -i '9s/<version>.*<\/version>/<version>${{ needs.prepare.outputs.version }}<\/version>/' pom.xml
+          sed -n '9p' pom.xml
 
       - name: Install dependencies
         run: |
