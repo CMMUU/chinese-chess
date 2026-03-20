@@ -1,0 +1,79 @@
+/* 中国象棋应用样式 */
+
+/* 根容器 */
+.root {
+    -fx-font-family: "Microsoft YaHei", "SimHei", "楷体", "KaiTi", sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* 棋盘容器 */
+.stack-pane {
+    -fx-background-color: #DEB887;
+    -fx-background-radius: 5;
+    -fx-border-color: #8B4513;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+}
+
+/* 工具栏 */
+.tool-bar {
+    -fx-background-color: #F5DEB3;
+    -fx-border-color: #D2B48C;
+    -fx-border-width: 0 0 1 0;
+    -fx-spacing: 10;
+    -fx-padding: 8 15 8 15;
+}
+
+/* 工具栏按钮 */
+.tool-bar .button {
+    -fx-background-color: #D2B48C;
+    -fx-text-fill: #4A2C0A;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 16 6 16;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.tool-bar .button:hover {
+    -fx-background-color: #C4A574;
+}
+
+.tool-bar .button:pressed {
+    -fx-background-color: #B8956A;
+}
+
+/* 状态栏 */
+.tool-bar:last-of-type {
+    -fx-background-color: #FAF0E6;
+    -fx-border-color: #D2B48C;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* 状态栏标签 */
+.label {
+    -fx-text-fill: #4A2C0A;
+    -fx-font-size: 14px;
+}
+
+/* 对话框 */
+.dialog-pane {
+    -fx-font-family: "Microsoft YaHei", "SimHei", "楷体", sans-serif;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-color: #D2B48C;
+    -fx-text-fill: #4A2C0A;
+    -fx-font-size: 13px;
+    -fx-padding: 5 20 5 20;
+}
+
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: #C4A574;
+}
+
+/* 分隔符 */
+.separator .line {
+    -fx-border-color: #A0522D;
+    -fx-border-width: 1 0 0 0;
+}
