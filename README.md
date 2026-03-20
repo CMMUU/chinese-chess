@@ -4,6 +4,7 @@
   <img src="https://img.shields.io/badge/Java-21-blue" alt="Java">
   <img src="https://img.shields.io/badge/JavaFX-21.0.2-blue" alt="JavaFX">
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+  <img src="https://github.com/CMMUU/chinese-chess/actions/workflows/build.yml/badge.svg" alt="Build">
 </p>
 
 一个跨平台的中国象棋桌面应用，采用 JavaFX 开发，支持人人对战、人机对战等多种模式。
@@ -113,6 +114,23 @@ src/
 │       └── css/style.css      # 样式文件
 └── test/                      # 单元测试
 ```
+
+## 版本发布
+
+使用 Git Tag 进行版本发布：
+
+```bash
+# 创建版本标签
+git tag v1.0.0
+
+# 推送到远程触发构建
+git push origin v1.0.0
+```
+
+推送后 GitHub Actions 会自动：
+1. 在 macOS、Windows、Linux 三个平台构建
+2. 生成对应的安装包（.dmg、.exe、.deb）
+3. 自动创建草稿 Release
 
 ## 下载安装
 
