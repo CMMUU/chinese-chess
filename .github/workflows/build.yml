@@ -1,0 +1,157 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Create DMG package
+        run: |
+          mkdir -p target/jpackage
+          jpackage \
+            --input target \
+            --main-jar chinese-chess-1.0.0.jar \
+            --name ChineseChess \
+            --app-version 1.0.0 \
+            --vendor "ChineseChess Team" \
+            --type dmg \
+            --dest target/jpackage
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-macOS
+          path: target/jpackage/ChineseChess-1.0.0.dmg
+          retention-days: 5
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/jpackage/ChineseChess-1.0.0.dmg
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Create EXE installer
+        run: |
+          mkdir -p target/jpackage
+          jpackage ^
+            --input target ^
+            --main-jar chinese-chess-1.0.0.jar ^
+            --name ChineseChess ^
+            --app-version 1.0.0 ^
+            --vendor "ChineseChess Team" ^
+            --type exe ^
+            --dest target/jpackage
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-Windows
+          path: target/jpackage/ChineseChess-1.0.0.exe
+          retention-days: 5
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/jpackage/ChineseChess-1.0.0.exe
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Create DEB package
+        run: |
+          mkdir -p target/jpackage
+          jpackage \
+            --input target \
+            --main-jar chinese-chess-1.0.0.jar \
+            --name ChineseChess \
+            --app-version 1.0.0 \
+            --vendor "ChineseChess Team" \
+            --type deb \
+            --dest target/jpackage
+
+      - name: Create AppImage
+        run: |
+          jpackage \
+            --input target \
+            --main-jar chinese-chess-1.0.0.jar \
+            --name ChineseChess \
+            --app-version 1.0.0 \
+            --vendor "ChineseChess Team" \
+            --type appimage \
+            --dest target/jpackage
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChineseChess-Linux
+          path: |
+            target/jpackage/ChineseChess-1.0.0.deb
+            target/jpackage/ChineseChess-1.0.0.AppImage
+          retention-days: 5
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/jpackage/ChineseChess-1.0.0.deb
+            target/jpackage/ChineseChess-1.0.0.AppImage
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
