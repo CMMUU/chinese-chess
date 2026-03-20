@@ -155,7 +155,7 @@
                     <!-- 生成 DMG 安装包 -->
                     <type>dmg</type>
                     <!-- 图标（可选） -->
-                    <!-- <icon>src/main/resources/icon.icns</icon> -->
+                    <icon>src/main/resources/ChineseChess.icns</icon>
                 </configuration>
             </plugin>
         </plugins>
