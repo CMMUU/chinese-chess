@@ -142,7 +142,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jpackage-plugin</artifactId>
-                <version>0.10.1</version>
+                <version>0.10.0</version>
                 <configuration>
                     <name>${app.name}</name>
                     <version>${app.version}</version>
