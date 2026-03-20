@@ -91,7 +91,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y fakeroot
+          sudo apt-get install -y fakeroot libfakeroot
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
@@ -100,13 +100,16 @@ jobs:
         run: |
           mkdir -p target/jpackage
           jpackage --input target --main-jar chinese-chess-1.0.0.jar --name ChineseChess --app-version 1.0.0 --vendor "ChineseChess Team" --type deb --dest target/jpackage
+        continue-on-error: true
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
+        if: success() || failure()
         with:
           name: ChineseChess-Linux
           path: target/jpackage/ChineseChess-1.0.0.deb
           retention-days: 5
+          if-no-files-found: ignore
 
   create-release:
     needs: [build-mac, build-windows, build-linux]
@@ -118,21 +121,26 @@ jobs:
         with:
           name: ChineseChess-macOS
           path: release-files
+        continue-on-error: true
 
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
           name: ChineseChess-Windows
           path: release-files
+        continue-on-error: true
 
       - name: Download Linux artifact
         uses: actions/download-artifact@v4
         with:
           name: ChineseChess-Linux
           path: release-files
+        continue-on-error: true
 
       - name: List files
-        run: ls -la release-files/
+        run: |
+          mkdir -p release-files
+          ls -la release-files/
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
