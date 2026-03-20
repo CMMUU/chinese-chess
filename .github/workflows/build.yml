@@ -132,18 +132,25 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Create DEB package
+        id: create_deb
         run: |
           mkdir -p target/jpackage
-          jpackage --input target --main-jar chinese-chess-${{ needs.prepare.outputs.version }}.jar --name ChineseChess --app-version ${{ needs.prepare.outputs.version }} --vendor "ChineseChess Team" --type deb --dest target/jpackage
-        continue-on-error: true
+          echo "Creating DEB package..."
+          jpackage --input target --main-jar chinese-chess-${{ needs.prepare.outputs.version }}.jar --name ChineseChess --app-version ${{ needs.prepare.outputs.version }} --vendor "ChineseChess Team" --type deb --dest target/jpackage || echo "DEB_FAILED=true" >> $GITHUB_OUTPUT
+
+      - name: List jpackage output
+        run: |
+          ls -la target/jpackage/ || echo "jpackage directory not found"
 
       - name: Check if DEB was created
         id: check_deb
         run: |
           if [ -f target/jpackage/ChineseChess-${{ needs.prepare.outputs.version }}.deb ]; then
             echo "DEB_EXISTS=true" >> $GITHUB_OUTPUT
+            echo "DEB file found!"
           else
             echo "DEB_EXISTS=false" >> $GITHUB_OUTPUT
+            echo "DEB file NOT found!"
           fi
 
       - name: Upload Linux artifact
@@ -152,6 +159,14 @@ jobs:
         with:
           name: ChineseChess-Linux
           path: target/jpackage/ChineseChess-${{ needs.prepare.outputs.version }}.deb
+          retention-days: 5
+
+      - name: Upload empty marker if DEB failed
+        uses: actions/upload-artifact@v4
+        if: steps.check_deb.outputs.DEB_EXISTS != 'true'
+        with:
+          name: ChineseChess-Linux
+          path: target/jpackage
           retention-days: 5
 
   create-release:
