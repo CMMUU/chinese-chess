@@ -189,6 +189,28 @@ jobs:
         with:
           files: release-flat/*
           draft: false
-          body: "中国象棋桌面应用 v${{ needs.prepare.outputs.version }}"
+          body: |
+            ## 中国象棋 Chinese Chess v${{ needs.prepare.outputs.version }}
+
+            一个跨平台的中国象棋桌面应用，采用 JavaFX 开发，支持人人对战、人机对战等多种模式。
+
+            ---
+
+            A cross-platform Chinese Chess desktop application built with JavaFX, supporting player-vs-player and player-vs-AI modes.
+
+            ### 功能特性 / Features
+
+            - 多种游戏模式 / Multiple game modes (PvP, PvE)
+            - 完整的象棋规则 / Complete Chinese Chess rules
+            - AI 引擎 / AI Engine (Minimax + Alpha-Beta pruning)
+            - 多难度级别 / Multiple difficulty levels
+
+            ### 下载 / Download
+
+            | 平台 / Platform | 文件 / File |
+            |----------------|-------------|
+            | macOS | ChineseChess-${{ needs.prepare.outputs.version }}.dmg |
+            | Windows | ChineseChess-${{ needs.prepare.outputs.version }}.exe |
+            | Linux | ChineseChess-${{ needs.prepare.outputs.version }}.deb |
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
