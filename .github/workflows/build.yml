@@ -68,14 +68,7 @@ jobs:
       - name: Create EXE installer
         run: |
           mkdir -p target/jpackage
-          jpackage ^
-            --input target ^
-            --main-jar chinese-chess-1.0.0.jar ^
-            --name ChineseChess ^
-            --app-version 1.0.0 ^
-            --vendor "ChineseChess Team" ^
-            --type exe ^
-            --dest target/jpackage
+          jpackage --input target --main-jar chinese-chess-1.0.0.jar --name ChineseChess --app-version 1.0.0 --vendor "ChineseChess Team" --type exe --dest target/jpackage
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
@@ -116,25 +109,11 @@ jobs:
       - name: Create DEB package
         run: |
           mkdir -p target/jpackage
-          jpackage \
-            --input target \
-            --main-jar chinese-chess-1.0.0.jar \
-            --name ChineseChess \
-            --app-version 1.0.0 \
-            --vendor "ChineseChess Team" \
-            --type deb \
-            --dest target/jpackage
+          jpackage --input target --main-jar chinese-chess-1.0.0.jar --name ChineseChess --app-version 1.0.0 --vendor "ChineseChess Team" --type deb --dest target/jpackage
 
       - name: Create AppImage
         run: |
-          jpackage \
-            --input target \
-            --main-jar chinese-chess-1.0.0.jar \
-            --name ChineseChess \
-            --app-version 1.0.0 \
-            --vendor "ChineseChess Team" \
-            --type appimage \
-            --dest target/jpackage
+          jpackage --input target --main-jar chinese-chess-1.0.0.jar --name ChineseChess --app-version 1.0.0 --vendor "ChineseChess Team" --type appimage --dest target/jpackage
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
