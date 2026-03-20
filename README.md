@@ -9,9 +9,9 @@
 
 <p align="center">
   <a href="README.md">中文</a> |
-  <a href="docs/core-code-guide.md">English</a> |
-  <a href="docs/core-code-guide-ja.md">日本語</a> |
-  <a href="docs/core-code-guide-ko.md">한국어</a>
+  <a href="README-en.md">English</a> |
+  <a href="README-ja.md">日本語</a> |
+  <a href="README-ko.md">한국어</a>
 </p>
 
 一个跨平台的中国象棋桌面应用，采用 JavaFX 开发，支持人人对战、人机对战等多种模式。
